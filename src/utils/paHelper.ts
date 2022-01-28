@@ -1,15 +1,12 @@
-const PA_DEMO_API = "https://api.picsart.io/tools/demo";
-const PA_API_KEY = "your_api_key";
-
 const applyTask = (
   formData: FormData,
   task: string
 ): Promise<{ editedSrc: string; errorMsg: string }> =>
-  fetch(`${PA_DEMO_API}/${task}`, {
+  fetch(`${process.env.PA_DEMO_API}/${task}`, {
     method: "POST",
     headers: {
       accept: "application/json",
-      apikey: PA_API_KEY,
+      apikey: process.env.PA_API_KEY!,
     },
     body: formData,
   })
