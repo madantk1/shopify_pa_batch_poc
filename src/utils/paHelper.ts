@@ -1,19 +1,22 @@
+const PA_DEMO_API= "https://api.picsart.io/tools/demo";
+const PA_API_KEY = "";
+
 const applyTask = (
   formData: FormData,
   task: string
-): Promise<{ editedSrc: string; errorMsg: string }> =>
-  fetch(`${process.env.PA_DEMO_API}/${task}`, {
+): Promise<{ imageUrl: string; error: string }> =>
+  fetch(`${PA_DEMO_API}/${task}`, {
     method: "POST",
     headers: {
       accept: "application/json",
-      apikey: process.env.PA_API_KEY!,
+      apikey: PA_API_KEY,
     },
     body: formData,
   })
     .then((res) => res.json())
-    .then(({ data, detail }) => ({
-      editedSrc: data?.url,
-      errorMsg: detail,
+    .then(({ data, detail, message }) => ({
+      imageUrl: data?.url,
+      error: detail || message,
     }));
 
 export const applyRemoveBg = (imageUrl: string) => {

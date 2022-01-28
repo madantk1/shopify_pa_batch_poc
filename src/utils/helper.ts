@@ -1,23 +1,25 @@
 import { INode, IItemProp, IImageProp } from "../types/item";
 
 export const formatItems = (items: INode[]): IItemProp[] =>
-  items?.map(
-    ({
-      node: {
-        id: productId,
-        images: { edges },
-        title,
-      },
-    }) => ({
-      productId,
-      images: edges.map(({ node }) => ({
-        ...node,
-        productId,
-        altText: node.altText || title,
-        loading: false,
-      })),
-    })
-  );
+  items?.length
+    ? items.map(
+        ({
+          node: {
+            id: productId,
+            images: { edges },
+            title,
+          },
+        }) => ({
+          productId,
+          images: edges.map(({ node }) => ({
+            ...node,
+            productId,
+            altText: node.altText || title,
+            loading: false,
+          })),
+        })
+      )
+    : [];
 
 export const updateSelectedImage = (
   images: IImageProp[],

@@ -34,15 +34,17 @@ export interface IPageInfo {
   hasNextPage: boolean;
 }
 
+export type TImageRes = {
+  id: string;
+  src: string;
+  altText: string;
+};
+
 export type TUpdateProductDetailsRes = {
   data: {
     productImageUpdate: {
-      image: {
-        id: string;
-        src: string;
-        altText: string;
-      };
-      userErrors: [];
+      image: TImageRes;
+      userErrors: any[];
     };
   };
 };
@@ -57,7 +59,7 @@ export type TCreateStagedLocationRes = {
         }[];
         url: string;
       }[];
-      userErrors: [];
+      userErrors: any[];
     };
   };
 };
