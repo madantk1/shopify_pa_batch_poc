@@ -1,0 +1,13 @@
+{
+  "global": {
+    "font": {
+      "size": "16px",
+      "family": "Segoe UI",
+      "weight": 600
+    },
+    "colors": {
+      "background": "#f4f5f8",
+      "text": "#575c6b"
+    }
+  }
+}
