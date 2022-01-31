@@ -6,8 +6,8 @@ import { Provider, useAppBridge } from "@shopify/app-bridge-react";
 import { authenticatedFetch } from "@shopify/app-bridge-utils";
 import { Redirect } from "@shopify/app-bridge/actions";
 import translations from "@shopify/polaris/locales/en.json";
-import { Grommet, ResponsiveContext } from "grommet";
-import themeConfig from "../grommetConfig.json";
+import { Grommet } from "grommet";
+import themeConfig from "../grommet.config.json";
 
 function userLoggedInFetch(app) {
   const fetchFunction = authenticatedFetch(app);
