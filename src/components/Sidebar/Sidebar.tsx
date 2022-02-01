@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => {
   const { action } = useContext(BatchContext);
   
   return (
-    <Box fill round overflow="hidden" pad="small" background="#ffffff">
+    <Box round overflow="hidden" pad="small" background="#ffffff" width="18rem">
       <Logo />
       {action === Actions.NULL ? <Toolkit /> : <EditorKit />}
     </Box>

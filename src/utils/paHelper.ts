@@ -1,14 +1,14 @@
-import { api, key } from "../../pa.config.json";
+import * as PA from "../../pa.config.json";
 
 const applyTask = (
   formData: FormData,
   task: string
 ): Promise<{ imageUrl: string; error: string }> =>
-  fetch(`${api}/${task}`, {
+  fetch(`${PA.API}/${task}`, {
     method: "POST",
     headers: {
       accept: "application/json",
-      apikey: key,
+      apikey: PA.KEY,
     },
     body: formData,
   })

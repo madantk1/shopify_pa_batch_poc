@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { BatchContext } from "context/BatchContext";
 import { Actions } from "../../../types/batch";
-import RemoveBg from "./RemoveBg/RemoveBg";
+import EditBackground from "./EditBackground/EditBackground";
 
 const EditorKit: React.FC = () => {
   const { action, setAction } = useContext(BatchContext);
@@ -10,7 +10,7 @@ const EditorKit: React.FC = () => {
 
   return (
     <>
-      {action === Actions.EDIT_BACKGROUND && <RemoveBg onCancel={toggleView} />}
+      {action === Actions.EDIT_BACKGROUND && <EditBackground onCancel={toggleView} />}
     </>
   );
 };

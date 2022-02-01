@@ -22,6 +22,7 @@ export interface IImageProp {
   src: string;
   altText: string;
   loading?: boolean;
+  previewUrl?: string | undefined;
 }
 
 export interface IItemProp {

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Box, Button } from "grommet";
+import { Box, Button, Text } from "grommet";
 import { BatchContext } from "context/BatchContext";
 import { Actions } from "types/batch";
 
@@ -19,8 +19,7 @@ const ActionButton: React.FC<IActionButton> = ({
   const { setAction, selectedItems } = useContext(BatchContext);
   return (
     <Button
-      margin={{ bottom: "small" }}
-      label={action}
+      label={<Text size="small">{action}</Text>}
       disabled={!selectedItems.length || isDisabled}
       onClick={() => setAction(action)}
     />
@@ -29,7 +28,7 @@ const ActionButton: React.FC<IActionButton> = ({
 
 const Toolkit: React.FC = () => {
   return (
-    <Box fill pad="small">
+    <Box fill pad="small" gap="small">
       <ActionButton action={Actions.UPSCALE} isDisabled={true} />
       <ActionButton action={Actions.EDIT_BACKGROUND} />
       <ActionButton action={Actions.RESIZE} isDisabled={true} />

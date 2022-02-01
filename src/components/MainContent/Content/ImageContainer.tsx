@@ -12,7 +12,7 @@ interface ImageContainerProp {
 const ImageContainer: React.FC<ImageContainerProp> = (props) => {
   const { image } = props;
   const { selectedItems, setSelectedItems, action } = useContext(BatchContext);
-  const imageContainerRef = useRef();
+  const imageContainerRef = useRef<HTMLImageElement>();
 
   const selectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
@@ -31,8 +31,9 @@ const ImageContainer: React.FC<ImageContainerProp> = (props) => {
         />
       )}
       <Image
+      style={{background: "transparent"}}
         ref={imageContainerRef}
-        src={image.src}
+        src={image.previewUrl ?? image.src}
         fit="contain"
         loading="lazy"
       />

@@ -17,6 +17,7 @@ const Content: React.FC<IContentProps> = (props) => {
   const size = useContext(ResponsiveContext);
 
   const getColumnWidth = () => {
+    if (size === "large") return '1/4';
     if (size === "medium") return '1/3';
     if (size === 'small') return '1/2';
   }

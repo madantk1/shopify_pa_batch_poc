@@ -1,19 +1,19 @@
 import React from 'react';
-import { Grid } from 'grommet';
+import { Box } from 'grommet';
 import Sidebar from './Sidebar/Sidebar';
 import MainContent from './MainContent/MainContent';
 
 const Batch: React.FC = () => {
   return (
-    <Grid
+    <Box
       fill
+      direction="row"
       pad={{ vertical: 'small', left: 'small', right: 'medium' }}
-      columns={['1/4', '3/4']}
       gap='small'
     >
       <Sidebar />
       <MainContent />
-    </Grid>
+    </Box>
   )
 };
 

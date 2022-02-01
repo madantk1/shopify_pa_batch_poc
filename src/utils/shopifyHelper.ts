@@ -1,4 +1,4 @@
-import { getFilename, imgUrlToFile } from "./helper";
+import { getFilename, base64ToFile } from "./helper";
 import {
   IImageProp,
   TCreateStagedLocationRes,
@@ -63,41 +63,41 @@ export const updateProductDetails = (
 
 export const shopifyImageUploader = async (
   imageObj: IImageProp,
-  paUrl: string,
   stagedUploadsCreate: MutationFunction,
   productUpdate: MutationFunction
-): Promise<{ image?: TImageRes; errors?: any[] }> => {
+): Promise<{ image?: TImageRes; errors?: any[]; task?: string }> => {
   // gets original image filename
   const filename = getFilename(imageObj.src);
 
   // converts image url to file format
-  const file = await imgUrlToFile(paUrl, filename);
+  const file = await base64ToFile(imageObj.previewUrl as string, filename);
 
   // creates shopify location in s3 bucket
   const {
     data: {
-      stagedUploadsCreate: { stagedTargets, userErrors },
+      stagedUploadsCreate: { stagedTargets, userErrors: errors1 },
     },
   } = await createStagedLocation(file, stagedUploadsCreate);
-  if (userErrors.length) return { errors: userErrors };
-  const [{ url, parameters }] = stagedTargets;
+  if (errors1.length)
+    return { task: "[1/3] create S3 bucket", errors: errors1 };
 
+  const [{ url, parameters }] = stagedTargets;
   // uploads the image to s3 bucket
   const res = await uploadFileToStaged(url, parameters, file);
-  if (!res.ok) return { errors: [res] };
-  else {
-    const { value } = parameters.filter(({ name }) => name === "key")[0];
-    const uploadedImgUrl = `${url}/${value}`;
-    // original image url gets replaced by image url in s3 bucket
-    const { data } = await updateProductDetails(
-      imageObj,
-      uploadedImgUrl,
-      productUpdate
-    );
-    const {
-      productImageUpdate: { image, userErrors },
-    } = data;
-    if (userErrors.length) return { errors: userErrors };
-    return { image };
-  }
+  if (!res.ok) return { task: "[2/3] upload to S3 bucket", errors: [res] };
+
+  const { value } = parameters.filter(({ name }) => name === "key")[0];
+  const uploadedImgUrl = `${url}/${value}`;
+  // original image url gets replaced by image url in s3 bucket
+  const { data } = await updateProductDetails(
+    imageObj,
+    uploadedImgUrl,
+    productUpdate
+  );
+  const {
+    productImageUpdate: { image, userErrors: errors2 },
+  } = data;
+  if (errors2.length)
+    return { task: "[3/3] update with S3 bucket url", errors: errors2 };
+  return { image };
 };

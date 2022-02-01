@@ -1,3 +1,4 @@
+import React from "react";
 import { INode, IItemProp, IImageProp } from "../types/item";
 
 export const formatItems = (items: INode[]): IItemProp[] =>
@@ -15,18 +16,19 @@ export const formatItems = (items: INode[]): IItemProp[] =>
             ...node,
             productId,
             altText: node.altText || title,
+            previewUrl: undefined,
             loading: false,
           })),
         })
       )
     : [];
 
-export const updateSelectedImage = (
-  images: IImageProp[],
-  selectedImage: Partial<IImageProp>
+export const updateItem = (
+  item: Partial<IImageProp>,
+  setState: React.Dispatch<React.SetStateAction<IImageProp[]>>
 ) =>
-  images.map((image) =>
-    image.id === selectedImage.id ? { ...image, ...selectedImage } : image
+  setState((prev) =>
+    prev.map((image) => (image.id === item.id ? { ...image, ...item } : image))
   );
 
 export const selectAll = (items: IItemProp[]) =>
@@ -50,14 +52,43 @@ export const isAllSelected = (
 export const isAnyLoading = (items: IImageProp[]): boolean =>
   items.some(({ loading }) => loading);
 
-export const getFilename = (url: string) =>
-  url.split(/[#?]/)[0].split("/").slice(-1)[0];
+export const isAnyPreview = (items: IImageProp[]): boolean =>
+items.some(({ previewUrl }) => !!previewUrl);
 
-export const imgUrlToFile = (url: string, filename: string) =>
+export const getFilename = (url: string) => {
+  // url.split(/[#?]/)[0].split("/").slice(-1)[0];
+  const re = /([\w\d\-]{1,}).(jpeg|jpg|png|bmp)/;
+  return url.match(re)?.[1] as string;
+};
+
+export const imgUrlToBlob = (url: string) =>
   fetch(url)
     .then((res) => res.blob())
-    .then((blob) => new Blob([blob], { type: "image/png" }))
-    .then((blob) => new File([blob], filename, { type: blob.type }));
+    .then((blob) => new Blob([blob], { type: "image/png" }));
+
+export const blobToBase64 = (blob: Blob) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = reject;
+  });
+
+export const blobToFile = (blob: Blob, filename: string) => {
+  return new File([blob], `${filename}.png`, { type: blob.type });
+};
+
+export const base64ToFile = (base64: string, filename: string) => {
+  const arr = base64.split(",");
+  const mime = arr[0].match(/:(.*?);/)?.[1];
+  const bstr = window.atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], `${filename}.png`, { type: mime });
+};
 
 // export const previousPageHandler = () =>
 //   alert("Functionality yet to be available.");

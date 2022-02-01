@@ -8,6 +8,13 @@
     "colors": {
       "background": "#f4f5f8",
       "text": "#575c6b"
+    },
+    "button": {
+      "default": {
+        "font": {
+          "size": "10px"
+        }
+      }
     }
   }
 }
